@@ -57,6 +57,13 @@ def normalize_url(value):
     return value
 
 
+def load_urls(input_path):
+    with open(input_path, "r", encoding="utf-8") as f:
+        raw = f.read()
+    values = [normalize_url(part) for part in re.split(r"[\s,]+", raw)]
+    return [value for value in values if value]
+
+
 def fetch(url, user_agent, timeout):
     req = urllib.request.Request(url, headers={"User-Agent": user_agent, "Accept": "text/html,application/xhtml+xml"})
     ctx = ssl.create_default_context()
@@ -117,9 +124,7 @@ def main():
     input_path = sys.argv[1]
     output_path = sys.argv[2]
     timeout = 20
-    with open(input_path, "r", encoding="utf-8") as f:
-        urls = [normalize_url(line) for line in f]
-    urls = [url for url in urls if url]
+    urls = load_urls(input_path)
     fields = ["input_url", "final_url", "status", "title", "meta_robots", "canonical", "text_length", "restriction_terms_found", "flags", "error"]
     with open(output_path, "w", encoding="utf-8-sig", newline="") as f:
         writer = csv.DictWriter(f, fieldnames=fields)
