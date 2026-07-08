@@ -1,2 +1,2 @@
 ﻿input_url,final_url,status,title,meta_robots,canonical,text_length,restriction_terms_found,flags,error
-https://www.umaxdata.com/,https://www.umaxdata.com/,200,香港源大數據uMax Data：精準數據、AI工具和創新方案 - 人工智能和數據驅動的科技公司,,,247,登入,thin_text;login_or_restriction_words,
+https://www.umaxdata.com/，https://www.umaxdata.com/about，https://www.umaxdata.com/awards/9a801443-9e6a-4356-b943-ad743b87cfd6，https://www.umaxdata.com/news/0d19ab8c-4bfb-4418-b8ab-687c5c040d33,,,,,,0,,fetch_failed,'ascii' codec can't encode character '\uff0c' in position 5: ordinal not in range(128)
