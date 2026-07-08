@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SEO Visibility Checker</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="app">
+    <section class="hero">
+      <div>
+        <p class="eyebrow">Batch SEO Visibility Checker</p>
+        <h1>批量檢查網站是否公開可抓取</h1>
+        <p class="lead">前端用於整理 URL、查看 CSV 報告；真正抓取由 Python 腳本或 GitHub Actions 執行，避免瀏覽器 CORS 限制。</p>
+      </div>
+      <a class="button ghost" href="https://support.google.com/webmasters/answer/9012289" target="_blank" rel="noreferrer">Google URL Inspection</a>
+    </section>
+
+    <section class="panel grid two">
+      <div>
+        <h2>1. 貼上要檢查的 URL</h2>
+        <textarea id="urlInput" placeholder="https://www.example.com/&#10;https://www.example.com/article/"></textarea>
+        <div class="actions">
+          <button id="downloadSites">下載 sites.txt</button>
+          <button id="copyCommand" class="secondary">複製本地執行指令</button>
+        </div>
+        <pre id="commandBox">python3 batch_seo_visibility_checker.py sites.txt docs/reports/latest.csv</pre>
+      </div>
+      <div>
+        <h2>2. 查看報告</h2>
+        <p>可上傳 CSV，也可讀取 GitHub Actions 產生的 <code>docs/reports/latest.csv</code>。</p>
+        <div class="actions">
+          <input id="csvFile" type="file" accept=".csv,text/csv">
+          <button id="loadLatest" class="secondary">讀取 latest.csv</button>
+        </div>
+        <div id="status" class="status">尚未載入報告</div>
+      </div>
+    </section>
+
+    <section class="stats" id="stats"></section>
+
+    <section class="panel">
+      <div class="toolbar">
+        <h2>檢查結果</h2>
+        <select id="flagFilter">
+          <option value="">全部</option>
+          <option value="ok">ok</option>
+          <option value="thin_text">thin_text</option>
+          <option value="noindex">noindex</option>
+          <option value="login_or_restriction_words">login_or_restriction_words</option>
+          <option value="http_error">http_error</option>
+          <option value="fetch_failed">fetch_failed</option>
+        </select>
+      </div>
+      <div class="tableWrap">
+        <table>
+          <thead>
+            <tr>
+              <th>URL</th>
+              <th>Status</th>
+              <th>Title</th>
+              <th>Text</th>
+              <th>Robots</th>
+              <th>Flags</th>
+            </tr>
+          </thead>
+          <tbody id="resultBody">
+            <tr><td colspan="6" class="empty">未有資料</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="panel docs">
+      <h2>建議驗證流程</h2>
+      <ol>
+        <li>先用此工具批量初篩，找出 <code>flags</code> 不是 <code>ok</code> 的 URL。</li>
+        <li>每個網站抽樣首頁、分類頁、文章/產品頁，在 Google Search Console 做 URL Inspection → Test Live URL。</li>
+        <li>對異常站點檢查 robots.txt、meta robots、CDN/WAF、防火牆、JS 渲染、登入限制。</li>
+      </ol>
+      <p>官方依據：<a href="https://developers.google.com/search/docs/crawling-indexing/overview-google-crawlers" target="_blank" rel="noreferrer">Google crawlers overview</a>、<a href="https://developers.google.com/search/docs/crawling-indexing/verifying-googlebot" target="_blank" rel="noreferrer">Verify Googlebot</a>。</p>
+    </section>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>
