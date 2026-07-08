@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       urls:
-        description: Paste one URL per line
+        description: Paste URLs separated by comma, space, or newline
         required: true
         type: string
 
@@ -21,9 +21,15 @@ jobs:
           python-version: "3.12"
       - name: Write URL list
         run: |
-          cat > sites.txt <<'EOF'
-          ${{ inputs.urls }}
-          EOF
+          python3 - <<'PY'
+          import re
+
+          raw = '''${{ inputs.urls }}'''
+          urls = [u.strip() for u in re.split(r'[\s,]+', raw) if u.strip()]
+          with open('sites.txt', 'w', encoding='utf-8') as f:
+              f.write('\n'.join(urls) + '\n')
+          print(f'Loaded {len(urls)} URL(s)')
+          PY
       - name: Run checker
         run: |
           mkdir -p docs/reports
