@@ -1,0 +1,37 @@
+name: SEO Visibility Check
+
+on:
+  workflow_dispatch:
+    inputs:
+      urls:
+        description: Paste one URL per line
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Write URL list
+        run: |
+          cat > sites.txt <<'EOF'
+          ${{ inputs.urls }}
+          EOF
+      - name: Run checker
+        run: |
+          mkdir -p docs/reports
+          python3 batch_seo_visibility_checker.py sites.txt docs/reports/latest.csv
+      - name: Commit report
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/reports/latest.csv
+          git diff --cached --quiet || git commit -m "Update SEO visibility report"
+          git push
